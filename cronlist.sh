@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script is to list cron jobs for all users.
+# This script is to list ALL cron jobs for all users.
 
 for user in $(cut -f1 -d: /etc/passwd)
 do
