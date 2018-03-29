@@ -1,0 +1,3 @@
+#!/bin/bash
+echo ""
+echo "This is  test file on git repo to get pulled from git repo to jenkins server"
