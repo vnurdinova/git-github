@@ -1,0 +1,55 @@
+puppet module install puppetlabs-java --version 1.4.0
+
+# and after java module is installed on puppet master, ediit /etc/puppet/manifests/site.pp file as below:
+{
+include java
+}
+
+#then run puppet agent -t comman on puppet agent node.
+
+#then edit /etc/puppet/manifests/site.pp file on puppet master again as below:
+
+
+node default {
+include java
+include tomcat
+}
+class tomcat {
+group{'tomcat':
+name =>'tomcat',
+ensure => present,
+}
+user{'tomcat':
+name =>'tomcat',
+ensure => present,
+groups => 'tomcat',
+require => Group['tomcat'],
+}
+exec {'gettomcat':
+path => '/bin:/usr/sbin:/usr/bin:/sbin',
+command => 'wget http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.29/bin/apache-tomcat-8.5.29.tar.gz',
+cwd => '/tmp',
+#require => Exec['install'],
+}
+exec {'extracttomcat':
+path => '/bin:/usr/sbin:/usr/bin:/sbin',
+cwd => '/tmp',
+command => 'sudo mkdir -p /opt/tomcat && tar xvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1',
+require => Exec['gettomcat'],
+}
+}
+
+#then run puppet agent -t command again on puppet agent node so that tomcat gets installed on it.
+#Become a root user and run below commands:
+cd /opt/tomcat/bin
+./startup.sh
+
+#and check whether tomcat is working properly by running below command:
+
+elinks http://localhost:8080
+
+#you should see as follow output:
+
+If you're seeing this, you have successfully installed Tomcat. Congratulations!
+
+#done!
