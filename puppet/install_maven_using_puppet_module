@@ -1,0 +1,19 @@
+#run below command on Puppet Master to install maven module:
+
+puppet module install maestrodev-maven --version 1.4.0
+
+#the module should be installed under /etc/puppet/modules directory.
+#if it is not installed under that directory then copy it to that dir from installed dir:
+
+cp -r /installed/dir/of/maven/module/* /etc/puppet/modules/
+
+#then open and edit /etc/puppet/manifests/site.pp file and add below lines in it:
+
+node default {
+include maven
+}
+
+#then run puppet agent -t on Puppet Agent Node.
+#and verify that maven is installed by running below command:
+mvn --version
+
